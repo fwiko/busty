@@ -15,7 +15,7 @@ def write_output(query):
 
 
 async def check(session, target):
-    async with session.get(target) as response:
+    async with session.get(target, timeout=15) as response:
         write_output({"url": target, "status_code": response.status, "reason": response.reason})
 
 async def launch_requests(session, target, dictionary, loop):
@@ -24,7 +24,7 @@ async def launch_requests(session, target, dictionary, loop):
         return_exceptions=True 
     )
 
-def validate_target(target, timeout=15):
+def validate_target(target):
     regex = re.compile(
         r'^(?:http|ftp)s?://'
         r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'
