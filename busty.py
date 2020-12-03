@@ -1,13 +1,22 @@
-import requests, re, sys, argparse, asyncio, aiohttp, datetime
+import requests
+import re
+import sys
+import argparse
+import asyncio
+import aiohttp
+import datetime
+
 
 def open_file(filename):
     with open(filename, 'r') as read:
         dictionary = read.read().splitlines()
     return dictionary
 
+
 def write_output(query):
-  
-    status_code, url, reason = query['status_code'], query['url'], query['reason']
+    status_code = query['status_code']
+    url = query['url']
+    reason = query['reason']
     if status_code == 200:
         print(f'>>>>> [{status_code}] {url} ({reason}) <<<<<')
     else:
@@ -16,29 +25,35 @@ def write_output(query):
 
 async def check(session, target):
     async with session.get(target, timeout=15) as response:
-        write_output({"url": target, "status_code": response.status, "reason": response.reason})
+        write_output({
+            "url": target,
+            "status_code": response.status,
+            "reason": response.reason
+            })
 
 async def launch_requests(session, target, dictionary, loop):
     await asyncio.gather(
         *[check(session, target.format(payload)) for payload in dictionary],
-        return_exceptions=True 
+        return_exceptions=True
     )
+
 
 def validate_target(target):
     regex = re.compile(
         r'^(?:http|ftp)s?://'
-        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?'
+        r'\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'
         r'localhost|'
         r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
         r'(?::\d+)?'
         r'(?:/?|[/?]\S+)$', re.IGNORECASE)
-    if (re.match(regex, target)): 
+    if (re.match(regex, target)):
         try:
             requests.head(target)
         except requests.exceptions.ConnectionError:
             return [False, f'Failed to connect to [{target}]']
         return [True]
-    else: 
+    else:
         return [False, f'Invalid link [{target}]']
 
 async def main(loop):
@@ -59,7 +74,8 @@ async def main(loop):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--target', help='URL to target', required=True)
-    parser.add_argument('--list', help="Specify list of directories to check", required=True)
+    parser.add_argument('--list', help="Specify list of directories to check",
+                        required=True)
     args = parser.parse_args()
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main(loop))
