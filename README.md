@@ -1,8 +1,7 @@
 # directory-buster
-Python based web directory scanner
+Python based web-directory scanner
 ```
-python main.py -d https://example.com -w list.txt -s 200
+python busty.py --target https://example.com --list list.txt
 ```
-- `-d/--domain` domain
-- `-w/--words` word list
-- `-s/--statuscode` optional status code
+- `--target` target domain
+- `--list` word list

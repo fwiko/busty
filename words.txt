@@ -1,4 +1,0 @@
-contact
-admin
-wp-admin
-wp-register
