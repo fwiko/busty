@@ -1,7 +1,7 @@
 # directory-buster
 Python based web-directory scanner
 
-`python -m pip install -t requirements.txt`
+`python -m pip install -r requirements.txt`
 
 #### Example
 ```
