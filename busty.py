@@ -4,6 +4,7 @@ import sys
 import argparse
 import asyncio
 import aiohttp
+import time
 from datetime import date
 
 
@@ -16,30 +17,27 @@ def open_file(filename):
 def output_to_file(title):
     with open(f'{title}-[{date.today()}].txt', 'a') as log:
         for result in results:
-            log.write(f'[{result[0]}] {result[1]} ({result[2]})\n')
+            log.write(f'[{result[0]}] {result[1]}\n')
         log.close()
 
 
-def write_output(query):
+async def write_output(query):
     status_code = query['status_code']
     url = query['url']
-    reason = query['reason']
-
     if args.status:
         if status_code == int(args.status):
-            results.append([status_code, url, reason])
-            print(f'[{status_code}] {url} ({reason})')
+            results.append([status_code, url])
+            print(f'[{status_code}] {url}')
     else:
-        results.append([status_code, url, reason])
-        print(f'[{status_code}] {url} ({reason})')
+        results.append([status_code, url])
+        print(f'[{status_code}] {url}')
 
 
 async def check(session, target):
     async with session.get(target, timeout=15) as response:
-        write_output({
+        await write_output({
             "url": target,
             "status_code": response.status,
-            "reason": response.reason
             })
 
 
@@ -106,6 +104,7 @@ async def main(loop):
                 target = target+'{}'
             async with aiohttp.ClientSession(loop=loop) as session:
                 await launch_requests(session, target, dictionary, loop)
+            print(f'Finished in {round(time.time()-start_time, 2)} seconds')
         else:
             print(f'Invalid status code [{args.status}]')
     else:
@@ -113,6 +112,7 @@ async def main(loop):
 
 if __name__ == '__main__':
     results = []
+    start_time = time.time()
     parser = argparse.ArgumentParser()
     parser.add_argument('--target', help='URL to target', required=True)
     parser.add_argument(
