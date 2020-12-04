@@ -4,7 +4,7 @@ import sys
 import argparse
 import asyncio
 import aiohttp
-import datetime
+from datetime import date
 
 
 def open_file(filename):
@@ -13,13 +13,24 @@ def open_file(filename):
     return dictionary
 
 
+def output_to_file(title):
+    with open(f'{title}-[{date.today()}].txt', 'a') as log:
+        for result in results:
+            log.write(f'[{result[0]}] {result[1]} ({result[2]})\n')
+        log.close()
+
+
 def write_output(query):
     status_code = query['status_code']
     url = query['url']
     reason = query['reason']
-    if status_code == 200:
-        print(f'>>>>> [{status_code}] {url} ({reason}) <<<<<')
+
+    if args.status:
+        if status_code == int(args.status):
+            results.append([status_code, url, reason])
+            print(f'[{status_code}] {url} ({reason})')
     else:
+        results.append([status_code, url, reason])
         print(f'[{status_code}] {url} ({reason})')
 
 
@@ -31,11 +42,17 @@ async def check(session, target):
             "reason": response.reason
             })
 
+
 async def launch_requests(session, target, dictionary, loop):
-    await asyncio.gather(
-        *[check(session, target.format(payload)) for payload in dictionary],
-        return_exceptions=True
-    )
+    try:
+        await asyncio.gather(
+            *[check(session, target.format(payload)) for payload in dictionary],
+            return_exceptions=True
+        )
+    except KeyboardInterrupt:
+        output_to_file(target.split('/')[2])
+    else:
+        output_to_file(target.split('/')[2])
 
 
 def validate_target(target):
@@ -56,26 +73,56 @@ def validate_target(target):
     else:
         return [False, f'Invalid link [{target}]']
 
+
+def validate_status_code(status_code):
+    try:
+        if int(status_code) in [100,101,102,103,
+                                200,201,202,203,204,205,206,207,208,226,
+                                300,301,302,303,304,305,306,307,308,
+                                400,401,402,403,404,405,406,407,408,409,410,411,412,413,414,415,416,417,418,421,422,423,424,425,426,428,429,431,451,
+                                500,501,502,503,504,505,506,507,508,510,511]:
+            return True
+        else:
+            return False
+    except ValueError:
+        return False
+
+
 async def main(loop):
 
     target = args.target
     dictionary = open_file(args.list)
     link_check = validate_target(target)
+    if args.status:
+        status_check = validate_status_code(args.status)
+    else:
+        status_check = True
+
     if link_check[0]:
-        if target[-1] != '/':
-            target = target+'/{}'
+        if status_check:
+            if target[-1] != '/':
+                target = target+'/{}'
+            else:
+                target = target+'{}'
+            async with aiohttp.ClientSession(loop=loop) as session:
+                await launch_requests(session, target, dictionary, loop)
         else:
-            target = target+'{}'
-        async with aiohttp.ClientSession(loop=loop) as session:
-            await launch_requests(session, target, dictionary, loop)
+            print(f'Invalid status code [{args.status}]')
     else:
         print(link_check[1])
 
 if __name__ == '__main__':
+    results = []
     parser = argparse.ArgumentParser()
     parser.add_argument('--target', help='URL to target', required=True)
-    parser.add_argument('--list', help="Specify list of directories to check",
-                        required=True)
+    parser.add_argument(
+        '--list', help="Specify list of directories to check",
+        required=True)
+    parser.add_argument(
+        '-s',
+        '--status',
+        help="Optionally specify a status code to look for",
+        required=False)
     args = parser.parse_args()
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main(loop))
