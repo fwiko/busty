@@ -14,6 +14,12 @@ Web-directory scanner written in python
 [404] https://raffsimms.com/admin
 
 ```
-- `--target` target domain*
-- `--list` word list*
-- `--status` status code
+- `--target`
+
+  the target domain to scan (required)
+- `--list` 
+
+  the word list to fetch url requests from (required)
+- `--status` 
+
+  optionally specify a certain status code to look for
