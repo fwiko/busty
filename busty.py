@@ -9,13 +9,13 @@ from datetime import date
 
 
 def open_file(filename):
-    with open(filename, 'r') as read:
+    with open('wordlists/'+filename, 'r') as read:
         dictionary = read.read().splitlines()
     return dictionary
 
 
 def output_to_file(title):
-    with open(f'{title}-[{date.today()}].txt', 'a') as log:
+    with open(f'logs/{title}-[{date.today()}].txt', 'a') as log:
         for result in results:
             log.write(f'[{result[0]}] {result[1]}\n')
         log.close()
@@ -87,7 +87,6 @@ def validate_status_code(status_code):
 
 
 async def main(loop):
-
     target = args.target
     dictionary = open_file(args.list)
     link_check = validate_target(target)
@@ -104,11 +103,12 @@ async def main(loop):
                 target = target+'{}'
             async with aiohttp.ClientSession(loop=loop) as session:
                 await launch_requests(session, target, dictionary, loop)
-            print(f'Finished in {round(time.time()-start_time, 2)} seconds')
+            print(f'\nFinished in {round(time.time()-start_time, 2)} seconds\n')
         else:
             print(f'Invalid status code [{args.status}]')
     else:
         print(link_check[1])
+
 
 if __name__ == '__main__':
     results = []

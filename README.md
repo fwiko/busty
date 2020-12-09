@@ -1,11 +1,18 @@
-# directory-buster
-Python based web-directory scanner
+# Busty
+Web-directory scanner written in python
 
-`python -m pip install -r requirements.txt`
 
-#### Example
+### Setup
+```sh
+> python -m pip install -r requirements.txt
 ```
-python busty.py --target https://example.com --list list.txt
+
+### Example
+```sh
+> python busty.py --target https://raffsimms.com --list list.txt
+[200] https://raffsimms.com/contact
+[404] https://raffsimms.com/admin
+
 ```
 - `--target` target domain*
 - `--list` word list*

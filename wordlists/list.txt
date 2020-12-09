@@ -1,0 +1,11 @@
+.git
+admin
+contact
+panel
+login
+login.php
+register
+register.php
+contact.php
+phpmyadmin
+mysql
