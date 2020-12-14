@@ -9,17 +9,22 @@ Web-directory scanner written in python
 
 ### Example
 ```sh
-> python busty.py --target https://raffsimms.com --list list.txt
-[200] https://raffsimms.com/contact
-[404] https://raffsimms.com/admin
+> python busty.py -t https://raffsimms.com -l default.txt
+[BUSTY] Using default.txt
 
+[200] https://raffsimms.com/contact
+
+Checked 11/11 | Found 1
+Finished in 0.29s
 ```
-- `--target`
+- `-t/--target`
 
   the target domain to scan (required)
-- `--list` 
+  
+- `-l/--list` 
 
   the word list to fetch url requests from (required)
-- `--status` 
+  
+<!-- - `--status` 
 
-  optionally specify a certain status code to look for
+  optionally specify a certain status code to look for --!>
