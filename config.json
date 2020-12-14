@@ -1,0 +1,11 @@
+{
+    "dirscanner": {
+        "timeout": 15,
+        "threads": 8,
+        "response-codes": [200, 301, 502, 403, 401],
+        "default-word-list": "default.txt",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"
+        }
+    }
+}
