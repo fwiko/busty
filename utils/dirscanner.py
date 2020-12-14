@@ -30,7 +30,7 @@ class DirScanner:
 
     def launch(self):
         with self.finish_time():
-            with open(f'logs/{round(time.time())}.txt', 'w+') as log:
+            with open(f'logs/log-{round(time.time())}.txt', 'w+') as log:
                 with futures.ThreadPoolExecutor(max_workers=self.config['threads']) as executor:
                     for response in futures.as_completed([executor.submit(self.request, payload) for payload in self.words]):
                         self.count += 1
