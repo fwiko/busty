@@ -7,7 +7,7 @@ Web-directory scanner written in python
 > python -m pip install -r requirements.txt
 ```
 
-### Example
+### Directory Scanner Example
 ```sh
 > python busty.py -t https://raffsimms.com -l default.txt
 [BUSTY] Using default.txt
