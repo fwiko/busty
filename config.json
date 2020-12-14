@@ -7,5 +7,14 @@
         "headers": {
             "user-agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"
         }
+    },
+    "subscanner": {
+        "timeout": 2,
+        "threads": 8,
+        "response-codes": [200, 401, 403, 502],
+        "default-word-list": "s_default.txt",
+        "headers": {
+            "user-agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"
+        }
     }
 }

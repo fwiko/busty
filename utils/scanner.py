@@ -5,20 +5,22 @@ import contextlib
 from concurrent import futures
 
 
-class DirScanner:
+@contextlib.contextmanager
+def finish_time():
+    start_time = time.time()
+    yield
+    print(f'Finished in %.2fs' % (time.time() - start_time))
+
+
+
+
+class Browse:
     def __init__(self, **kwargs):
         self.target = kwargs['target']
-        self.checks = kwargs['checks']
         self.words = kwargs['words']
         self.config = kwargs['config']
         self.count = 0
         self.found = 0
-
-    @contextlib.contextmanager
-    def finish_time(self):
-        start_time = time.time()
-        yield
-        print(f'Finished in %.2fs' % (time.time() - start_time))
 
     def request(self, payload):
         url = self.target.format(payload)
@@ -28,8 +30,9 @@ class DirScanner:
         except requests.exceptions.ConnectTimeout:
             return {'response_code': 408, 'url': url}
 
+
     def launch(self):
-        with self.finish_time():
+        with finish_time():
             with open(f'logs/log-{round(time.time())}.txt', 'w+') as log:
                 with futures.ThreadPoolExecutor(max_workers=self.config['threads']) as executor:
                     for response in futures.as_completed([executor.submit(self.request, payload) for payload in self.words]):
