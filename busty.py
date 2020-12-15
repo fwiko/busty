@@ -63,36 +63,6 @@ def start_directory_scan(args, target):
         target.launch()
 
 
-def start_subdirectory_scan(args, target):
-    try:
-        config = json.load(open('config.json', 'r'))['subscanner']
-    except FileNotFoundError:
-        print('[ERROR] Config file could not be found')
-    else:
-        if not args.list:
-            try:
-                words = open('wordlists/{}'.format(config['default-word-list']), 'r').read().splitlines()
-                print('[BUSTY] Using '+config['default-word-list'])
-                time.sleep(1.5)
-            except FileNotFoundError:
-                print('[ERROR] Default wordlist cannot be found., please specify a wordlist.')
-                sys.exit()
-        else:
-            try:
-                words = open('wordlists/'+args.list, 'r').read().splitlines()
-                print(f'[BUSTY] Using {args.list}')
-                time.sleep(1.5)
-            except FileNotFoundError:
-                print('[ERROR] Specified wordlist cannot be found.')
-                sys.exit()
-        target = scanner.Browse(**{
-            'target': target,
-            'words': words,
-            'config': config
-        })
-        target.launch()
-
-
 if __name__ == '__main__':
     arguments = parse_args()
 
