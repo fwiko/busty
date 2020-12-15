@@ -34,7 +34,7 @@ Finished in 0.29s
 ### Config
 
 ```json
-"dirscanner": {
+{
     "timeout": 15,
     "threads": 8,
     "response-codes": [200, 301, 502, 403, 401],
@@ -50,4 +50,3 @@ Finished in 0.29s
 - response-codes - Response codes that will be watched for and output
 - default-word-list - Default word list to use if one is not specified
 - headers - Headers to be used for requests
-
