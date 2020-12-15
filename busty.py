@@ -14,7 +14,9 @@ def parse_error(message):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(epilog='\tExample: \r\npython ' + sys.argv[0] + " -t example.com -l wordlist.txt")
+    parser = argparse.ArgumentParser(
+        epilog='\tExample: \r\npython ' + sys.argv[0] + " -t example.com -l wordlist.txt"
+        )
     parser.error = parse_error
     parser.add_argument('-m', '--mode', help='Select the mode to run (ds, ss)', required=True)
     parser.add_argument('-t', '--target', help='Specified target address to scan.', required=True)
