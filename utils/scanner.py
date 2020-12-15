@@ -13,8 +13,6 @@ def finish_time():
     print(f'Finished in %.2fs' % (time.time() - start_time))
 
 
-
-
 class Browse:
     def __init__(self, **kwargs):
         self.target = kwargs['target']
