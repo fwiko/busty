@@ -12,7 +12,7 @@ Web-directory scanner written in python
 ### Example
 
 ```sh
-> python busty.py -t https://raffsimms.com -l default.txt
+> python busty.py -m ds -t https://raffsimms.com -l default.txt
 [BUSTY] Using default.txt
 
 [200] https://raffsimms.com/contact
