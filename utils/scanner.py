@@ -28,7 +28,9 @@ class Browse:
                 return {'response_code': result.status_code, 'url': url}
         except requests.exceptions.ConnectTimeout:
             return {'response_code': 408, 'url': url}
-
+        except requests.exceptions.ConnectionError:
+            return {'response_code': 502, 'url': url}
+        
 
     def launch(self):
         with finish_time():
