@@ -48,4 +48,3 @@ class Browse:
                         print(f'Checked {self.count}/{len(self.words)} | Found {self.found}', end='\r')
                         sys.stdout.flush()
                     print('\n')
-                    log.close()
