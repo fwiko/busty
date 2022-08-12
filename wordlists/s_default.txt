@@ -1,6 +1,0 @@
-checker
-admin
-panel
-phpmyadmin
-portainer
-poggers
