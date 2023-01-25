@@ -106,13 +106,15 @@ func main() {
 	var wg sync.WaitGroup
 	in := make(chan string, options.WorkerCount)
 
-	targetAddressText := leftJustify("Target", 9) + ": " + options.TargetAddress
-	wordlistText := leftJustify("Wordlist", 9) + ": " + filepath.Base(options.WordlistPath)
-	workersText := leftJustify("Threads", 9) + ": " + strconv.Itoa(options.WorkerCount)
-
-	fmt.Printf("\n* %s\n* %s\n* %s\n\n", targetAddressText, wordlistText, workersText)
+	fmt.Printf(
+		"\n* %s\n* %s\n* %s\n\n",
+		fmt.Sprintf("Target..... %s", options.TargetAddress),
+		fmt.Sprintf("Wordlist... %s", filepath.Base(options.WordlistPath)),
+		fmt.Sprintf("Threads.... %d", options.WorkerCount),
+	)
 
 	matches := 0
+	checked := 0
 
 	for i := 0; i < options.WorkerCount; i++ {
 		wg.Add(1)
@@ -128,6 +130,12 @@ func main() {
 					fmt.Printf("[%d] %s\n", statusCode, t)
 					matches++
 				}
+				checked++
+				if checked != len(wordlist) {
+					fmt.Fprintf(os.Stdout, "* %d/%d Checked, %d Matches\r", checked, len(wordlist), matches)
+				} else {
+					fmt.Printf("\n* %d/%d Checked, %d Matches", checked, len(wordlist), matches)
+				}
 			}
 		}()
 	}
@@ -137,6 +145,4 @@ func main() {
 	}
 	close(in)
 	wg.Wait()
-
-	fmt.Printf("\n* Scanned %d paths | Found %d matches\n", len(wordlist), matches)
 }
