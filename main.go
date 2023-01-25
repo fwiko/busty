@@ -125,7 +125,7 @@ func main() {
 					continue
 				}
 				if slices.Contains(options.StatusCodes, statusCode) {
-					fmt.Printf("%s (Status: %s)\n", "/"+word, strconv.Itoa(statusCode))
+					fmt.Printf("[%d] %s\n", statusCode, t)
 					matches++
 				}
 			}
