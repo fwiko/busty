@@ -11,7 +11,7 @@ go build .
 ## Usage
 
 ```console
-./busty --target=https://example.com --wordlist=./wordlist.txt --workers=8
+./busty --target=https://example.com --wordlist=./wordlist.txt --workers=8 --output
 ```
 
 ## Arguments
@@ -20,3 +20,4 @@ go build .
 - `--wordlist` The wordlist to use
 - `--workers` Number of threads to use (default: CPU thread count)
 - `--status-codes` Comma-separated list of status codes to include in the scan (default: 200,301,302,303,307)
+- `--output` Specify whether or not results should be output to a CSV file (default: false)
